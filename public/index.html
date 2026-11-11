@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VlackDiamond — Perfumes Árabes, Gorras y Bolsas para Hombre</title>
+  <meta name="description" content="VlackDiamond: perfumes árabes, gorras Barbas Hats, Dandy Hats, JC Hats y bolsas para hombre. Pide por WhatsApp y paga por transferencia. Envío a todo México.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <canvas id="lux-rain" aria-hidden="true"></canvas>
+
+  <div class="announce" role="note">
+    <span>Envío a todo México</span><i>◆</i><span>Pago por transferencia</span><i>◆</i><span>Atención personal por WhatsApp</span>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <a class="logo" href="/">VLACK<span>DIAMOND</span></a>
+        <small class="brand-byline">By: R. Padilla</small>
+      </div>
+      <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">☰</button>
+      <nav class="main-nav" id="main-nav" aria-label="Menú principal">
+        <ul class="nav-list">
+          <li><button class="nav-link" data-filter="all">Todos</button></li>
+          <li class="has-dropdown">
+            <button class="nav-link" data-filter="Perfumes Árabes" aria-haspopup="true">Perfumes Árabes ▾</button>
+            <ul class="dropdown">
+              <li><button data-filter="Perfumes Árabes">Todos los perfumes</button></li>
+            </ul>
+          </li>
+          <li class="has-dropdown">
+            <button class="nav-link" data-filter="Gorras" aria-haspopup="true">Gorras ▾</button>
+            <ul class="dropdown">
+              <li><button data-filter="Gorras">Todas las gorras</button></li>
+              <li><button data-filter="Gorras" data-brand="Barbas Hats">Barbas Hats</button></li>
+              <li><button data-filter="Gorras" data-brand="Dandy Hats">Dandy Hats</button></li>
+              <li><button data-filter="Gorras" data-brand="JC Hats">JC Hats</button></li>
+              <li><button data-filter="Gorras" data-brand="Otros">Otros</button></li>
+            </ul>
+          </li>
+          <li class="has-dropdown">
+            <button class="nav-link" data-filter="Bolsas para hombre" aria-haspopup="true">Bolsas para hombre ▾</button>
+            <ul class="dropdown">
+              <li><button data-filter="Bolsas para hombre">Todas las bolsas</button></li>
+              <li><button data-filter="Bolsas para hombre" data-type="Neceser">Neceser</button></li>
+              <li><button data-filter="Bolsas para hombre" data-type="Sobaquera">Sobaquera</button></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button id="account-button" class="btn btn-ghost">Mi cuenta</button>
+        <button id="cart-button" class="btn btn-gold">Carrito (<span id="cart-count">0</span>)</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Portada -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow"><span class="rule"></span>PERFUMES ÁRABES · GORRAS · BOLSAS PARA HOMBRE<span class="rule"></span></p>
+        <h1>Estilo que se nota.<br><span class="gold-text">Calidad VlackDiamond.</span></h1>
+        <p class="hero-text">Perfumes árabes de carácter, gorras Barbas Hats, Dandy Hats y JC Hats, y bolsas tipo neceser y sobaquera para hombre. Elige tus piezas, confirma tu pedido por WhatsApp y paga por transferencia. Nosotros nos encargamos del envío.</p>
+        <div class="hero-cta">
+          <a class="btn btn-gold btn-lg" href="#catalogo">Ver catálogo ↓</a>
+          <a class="btn btn-wa btn-lg" href="https://wa.me/524493130357?text=Hola%20VlackDiamond%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener">Pedir por WhatsApp</a>
+        </div>
+        <ul class="trust-strip" aria-label="Garantías de la tienda">
+          <li><strong>✓</strong><span>Envío a todo México</span></li>
+          <li><strong>✓</strong><span>Pago por transferencia</span></li>
+          <li><strong>✓</strong><span>Atención por WhatsApp</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Categorías -->
+    <section class="categories reveal" id="categorias" aria-label="Categorías">
+      <div class="section-head">
+        <p class="section-eyebrow">La colección</p>
+        <h2 class="section-title">Compra por categoría</h2>
+        <p class="section-sub">Tres líneas, un mismo estándar: piezas elegidas para vestir bien todos los días.</p>
+      </div>
+      <div class="category-grid">
+        <button class="category-card" type="button" data-filter="Perfumes Árabes">
+          <span class="category-letter" aria-hidden="true">P</span>
+          <span class="category-name">Perfumes Árabes</span>
+          <span class="category-desc">Oud, ámbar y almizcle. Aromas intensos, elegantes y de larga duración.</span>
+          <span class="category-cta">Ver perfumes →</span>
+        </button>
+        <button class="category-card" type="button" data-filter="Gorras">
+          <span class="category-letter" aria-hidden="true">G</span>
+          <span class="category-name">Gorras</span>
+          <span class="category-desc">Barbas Hats, Dandy Hats y JC Hats. Clásicas, trucker, planas y beisboleras.</span>
+          <span class="category-cta">Ver gorras →</span>
+        </button>
+        <button class="category-card" type="button" data-filter="Bolsas para hombre">
+          <span class="category-letter" aria-hidden="true">B</span>
+          <span class="category-name">Bolsas para hombre</span>
+          <span class="category-desc">Neceser y sobaquera. Piel, cuero y materiales resistentes para el día a día.</span>
+          <span class="category-cta">Ver bolsas →</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Catálogo -->
+    <section class="toolbar" id="catalogo">
+      <div class="toolbar-head">
+        <div>
+          <p class="section-eyebrow">Catálogo</p>
+          <h2 id="catalog-title">Todos los productos</h2>
+        </div>
+        <p id="result-count" class="result-count" aria-live="polite"></p>
+      </div>
+      <div class="toolbar-card">
+        <label class="search-box">
+          <span>Buscar</span>
+          <input id="search-input" type="search" placeholder="Busca perfume, gorra o bolsa…">
+        </label>
+        <label class="filter-box">Precio mín.
+          <input id="price-min" type="number" min="0" placeholder="$0">
+        </label>
+        <label class="filter-box">Precio máx.
+          <input id="price-max" type="number" min="0" placeholder="Sin límite">
+        </label>
+        <label class="filter-box">Ordenar
+          <select id="sort-select">
+            <option value="featured">Destacados</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="name-asc">Nombre: A a Z</option>
+            <option value="name-desc">Nombre: Z a A</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section id="status-banner" class="status-banner" hidden></section>
+
+    <section id="product-grid" class="product-grid" aria-live="polite"></section>
+    <p id="empty-catalog" class="empty-catalog" hidden>No hay productos en esta categoría por ahora.</p>
+
+    <!-- Cómo comprar -->
+    <section class="how reveal" aria-label="Cómo comprar">
+      <div class="section-head">
+        <p class="section-eyebrow">Así de fácil</p>
+        <h2 class="section-title">Cómo comprar en 3 pasos</h2>
+        <p class="section-sub">Sin registro obligatorio y sin pago en la página. Tú eliges, nosotros te atendemos por WhatsApp.</p>
+      </div>
+      <ol class="how-grid">
+        <li>
+          <span class="how-num" aria-hidden="true">01</span>
+          <h3>Elige tus piezas</h3>
+          <p>Explora el catálogo, abre el detalle de cada producto y agrégalo a tu carrito.</p>
+        </li>
+        <li>
+          <span class="how-num" aria-hidden="true">02</span>
+          <h3>Confirma por WhatsApp</h3>
+          <p>Escribe tus datos de envío y confirma. Tu pedido llega con todo el detalle para pagar por transferencia.</p>
+        </li>
+        <li>
+          <span class="how-num" aria-hidden="true">03</span>
+          <h3>Recibe tu pedido</h3>
+          <p>Confirmamos tu transferencia, preparamos tu paquete y te lo enviamos a todo México.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Marcas -->
+    <section class="brands reveal" aria-label="Marcas que trabajamos">
+      <p class="section-eyebrow">Las marcas que trabajamos</p>
+      <p class="brands-line">Barbas Hats <span>◆</span> Dandy Hats <span>◆</span> JC Hats <span>◆</span> VlackDiamond Selection</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand">
+          <a class="logo" href="/">VLACK<span>DIAMOND</span></a>
+          <small class="brand-byline">By: R. Padilla</small>
+        </div>
+        <p>Perfumes árabes, gorras y bolsas para hombre. Estilo que se nota, calidad VlackDiamond.</p>
+        <p><a class="footer-wa" href="https://wa.me/524493130357" target="_blank" rel="noopener">WhatsApp: +52 449 313 0357</a></p>
+      </div>
+      <div class="footer-col">
+        <h3>Categorías</h3>
+        <ul class="footer-links">
+          <li><button data-filter="Perfumes Árabes">Perfumes Árabes</button></li>
+          <li><button data-filter="Gorras">Gorras</button></li>
+          <li><button data-filter="Bolsas para hombre">Bolsas para hombre</button></li>
+          <li><button data-filter="all">Todos los productos</button></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Ayuda</h3>
+        <ul class="footer-links">
+          <li><a href="https://wa.me/524493130357" target="_blank" rel="noopener">Pedir por WhatsApp</a></li>
+          <li><a href="/terminos.html">Términos y condiciones</a></li>
+          <li><a href="/privacidad.html">Aviso de privacidad</a></li>
+          <li><a href="/admin">Panel de administración</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 VlackDiamond · Pago por transferencia · Envíos a todo México</p>
+      <p><button id="rain-toggle" class="btn btn-ghost btn-small" type="button" aria-pressed="true">✨ Pausar lluvia dorada</button></p>
+    </div>
+  </footer>
+
+  <!-- Detalle de producto -->
+  <div id="detail-overlay" class="overlay" hidden>
+    <div class="panel" role="dialog" aria-label="Detalle del producto">
+      <button class="panel-close" data-close="detail-overlay" aria-label="Cerrar">✕</button>
+      <div id="detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Carrito / Pedido -->
+  <div id="cart-overlay" class="overlay" hidden>
+    <div class="panel" role="dialog" aria-label="Carrito">
+      <button class="panel-close" data-close="cart-overlay" aria-label="Cerrar">✕</button>
+      <h2>Tu carrito</h2>
+      <div id="cart-items"></div>
+      <p class="cart-total">Total: <strong id="cart-total">$0 MXN</strong></p>
+      <form id="checkout-form">
+        <h3>Datos para tu pedido</h3>
+        <label>Nombre completo *
+          <input id="co-name" required autocomplete="name" placeholder="Tu nombre">
+        </label>
+        <label>Teléfono (WhatsApp) *
+          <input id="co-phone" required autocomplete="tel" placeholder="Ej. 449 123 4567">
+        </label>
+        <label>Correo (opcional)
+          <input id="co-email" type="email" autocomplete="email" placeholder="tu@correo.com">
+        </label>
+        <label>Dirección de envío *
+          <textarea id="co-address" required rows="3" placeholder="Calle, número, colonia, ciudad, estado y código postal"></textarea>
+        </label>
+        <p class="checkout-note">Al confirmar, tu pedido se guarda y te llevamos a WhatsApp para que lo confirmes y pagues por transferencia. No se cobra nada en esta página.</p>
+        <button type="submit" class="btn btn-gold btn-block">Confirmar pedido por WhatsApp →</button>
+      </form>
+      <p id="checkout-error" class="form-error" hidden></p>
+      <div id="order-success" hidden>
+        <p>✅ Pedido <strong id="order-number"></strong> guardado.</p>
+        <p>Te estamos llevando a WhatsApp para confirmarlo. Si no se abre, usa este enlace:</p>
+        <a id="order-whatsapp-link" class="btn btn-gold btn-block" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cuenta: registro / inicio de sesión / mis pedidos -->
+  <div id="account-overlay" class="overlay" hidden>
+    <div class="panel" role="dialog" aria-label="Mi cuenta">
+      <button class="panel-close" data-close="account-overlay" aria-label="Cerrar">✕</button>
+      <div id="account-guest">
+        <h2>Mi cuenta</h2>
+        <p>Regístrate para llevar un registro de tus compras y pedir más rápido.</p>
+        <div class="tabs">
+          <button id="tab-login" class="tab active">Iniciar sesión</button>
+          <button id="tab-register" class="tab">Crear cuenta</button>
+        </div>
+        <form id="login-form">
+          <label>Correo
+            <input id="login-email" type="email" required autocomplete="email">
+          </label>
+          <label>Contraseña
+            <input id="login-password" type="password" required autocomplete="current-password">
+          </label>
+          <button type="submit" class="btn btn-gold btn-block">Entrar</button>
+        </form>
+        <form id="register-form" hidden>
+          <label>Nombre completo *
+            <input id="reg-name" required autocomplete="name">
+          </label>
+          <label>Correo *
+            <input id="reg-email" type="email" required autocomplete="email">
+          </label>
+          <label>Teléfono
+            <input id="reg-phone" autocomplete="tel">
+          </label>
+          <label>Contraseña (mín. 6 caracteres) *
+            <input id="reg-password" type="password" required minlength="6" autocomplete="new-password">
+          </label>
+          <button type="submit" class="btn btn-gold btn-block">Crear mi cuenta</button>
+        </form>
+        <p id="account-error" class="form-error" hidden></p>
+      </div>
+      <div id="account-user" hidden>
+        <h2>Hola, <span id="account-name"></span></h2>
+        <p id="account-email"></p>
+        <button id="logout-button" class="btn btn-ghost">Cerrar sesión</button>
+        <h3>Mis pedidos</h3>
+        <div id="my-orders"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/lux-rain.js" defer></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

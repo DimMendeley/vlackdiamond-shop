@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — VlackDiamond</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/">VLACK<span>DIAMOND</span></a>
+      <span class="product-meta">Panel de administración</span>
+      <div class="header-actions"><a class="btn btn-ghost" href="/">Ver tienda</a></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="admin-login" class="admin-card" style="max-width:480px;margin:24px auto;">
+      <h1>Administración</h1>
+      <p>Escribe tu clave de administrador (la variable <code>ADMIN_KEY</code> de Render / tu archivo <code>.env</code>). La clave se guarda solo en este navegador.</p>
+      <form id="login-form">
+        <label>Clave de administrador
+          <input id="admin-key" type="password" required autocomplete="off" placeholder="Tu ADMIN_KEY">
+        </label>
+        <button type="submit" class="btn btn-gold btn-block">Entrar al panel</button>
+      </form>
+      <p id="login-error" class="form-error" hidden></p>
+    </section>
+
+    <section id="admin-panel" hidden>
+      <h1>Panel de VlackDiamond</h1>
+      <p id="admin-stats" class="product-meta"></p>
+      <div class="admin-grid">
+        <div class="admin-card">
+          <h2 id="form-title">Nuevo producto</h2>
+          <form id="product-form" enctype="multipart/form-data">
+            <input type="hidden" id="pf-id">
+            <label>Nombre *
+              <input id="pf-name" required placeholder="Ej. Oud Royal Ámbar — 100 ml">
+            </label>
+            <label>Categoría *
+              <select id="pf-category" required>
+                <option value="Perfumes Árabes">Perfumes Árabes</option>
+                <option value="Gorras">Gorras</option>
+                <option value="Bolsas para hombre">Bolsas para hombre</option>
+              </select>
+            </label>
+            <label>Marca (gorras: Barbas Hats, Dandy Hats, JC Hats, Otros)
+              <input id="pf-brand" placeholder="Ej. Barbas Hats">
+            </label>
+            <label>Tipo (bolsas: Neceser o Sobaquera)
+              <input id="pf-type" placeholder="Ej. Neceser">
+            </label>
+            <label>Descripción *
+              <textarea id="pf-description" rows="4" required placeholder="Describe el producto: aroma, material, tamaño, para quién es…"></textarea>
+            </label>
+            <label>Precio en MXN *
+              <input id="pf-price" type="number" min="1" required placeholder="Ej. 1299">
+            </label>
+            <label>Precio anterior en MXN (opcional, para oferta)
+              <input id="pf-original-price" type="number" min="1" placeholder="Ej. 1899">
+            </label>
+            <p class="checkout-note">Si lo llenas con un precio mayor que el precio actual, el producto se mostrará en oferta con ese precio tachado y la insignia del descuento. Si lo dejas vacío, el producto no tiene oferta.</p>
+            <label>Stock *
+              <input id="pf-stock" type="number" min="0" required placeholder="Ej. 10">
+            </label>
+            <label>Foto (máx. 5 MB, solo imágenes)
+              <input id="pf-image" type="file" accept="image/*">
+            </label>
+            <p id="pf-current-photo" class="checkout-note" hidden></p>
+            <label><input id="pf-active" type="checkbox" checked> Producto activo (visible en la tienda)</label>
+            <button type="submit" class="btn btn-gold btn-block">Guardar producto</button>
+            <button type="button" id="form-reset" class="btn btn-block">Limpiar formulario</button>
+          </form>
+          <p id="form-error" class="form-error" hidden></p>
+          <p id="form-ok" class="status-banner ok" hidden></p>
+        </div>
+
+        <div class="admin-card">
+          <h2>Productos (<span id="product-count">0</span>)</h2>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead><tr><th>Foto</th><th>Producto</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody id="product-rows"></tbody>
+            </table>
+          </div>
+
+          <h2 style="margin-top:32px;">Pedidos (<span id="order-count">0</span>)</h2>
+          <div id="order-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    'use strict';
+    const $ = (id) => document.getElementById(id);
+    const key = () => sessionStorage.getItem('vd_admin_key') || '';
+    const money = (n) => `$${Number(n || 0).toLocaleString('es-MX')} MXN`;
+    const esc = (t) => String(t || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+
+    async function adminFetch(url, options = {}) {
+      const res = await fetch(url, {
+        ...options,
+        headers: { ...(options.headers || {}), 'x-admin-key': key() },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'La solicitud falló.');
+      return data;
+    }
+
+    async function enterPanel() {
+      try {
+        await adminFetch('/api/admin/verify');
+        $('admin-login').hidden = true;
+        $('admin-panel').hidden = false;
+        await refreshAll();
+      } catch (e) {
+        $('login-error').hidden = false;
+        $('login-error').textContent = e.message;
+      }
+    }
+
+    async function refreshAll() {
+      const [stats, products, orders] = await Promise.all([
+        adminFetch('/api/admin/stats'),
+        adminFetch('/api/admin/products'),
+        adminFetch('/api/admin/orders'),
+      ]);
+      $('admin-stats').textContent = `${stats.products} productos activos · ${stats.orders} pedidos · $${Number(stats.revenue_mxn).toLocaleString('es-MX')} MXN en pedidos no cancelados · ${stats.users} clientes registrados`;
+      $('product-count').textContent = products.length;
+      $('product-rows').innerHTML = products.map((p) => `<tr>
+        <td>${p.image_path ? `<img class="admin-thumb" src="${esc(p.image_path)}" alt="">` : '<span class="product-meta">Sin foto</span>'}</td>
+        <td><strong>${esc(p.name)}</strong><br><span class="product-meta">${esc([p.category, p.brand, p.type].filter(Boolean).join(' · '))}</span></td>
+        <td>${p.original_price_mxn && p.original_price_mxn > p.price_mxn ? `<span class="price-old">${money(p.original_price_mxn)}</span><br>` : ''}${money(p.price_mxn)}</td>
+        <td>${p.stock}</td>
+        <td>${p.active ? 'Activo' : 'Inactivo'}</td>
+        <td>
+          <button class="btn btn-small" data-edit="${p.id}">Editar</button>
+          <button class="btn btn-small btn-danger" data-delete="${p.id}">Eliminar</button>
+        </td>
+      </tr>`).join('');
+      $('order-count').textContent = orders.length;
+      $('order-list').innerHTML = orders.length === 0 ? '<p>No hay pedidos todavía.</p>' : orders.map((o) => `<div class="order-card">
+        <strong>${esc(o.order_number)}</strong> · ${new Date(o.created_at + 'Z').toLocaleDateString('es-MX')}<br>
+        ${esc(o.customer_name)} · ${esc(o.customer_phone)}<br>
+        ${esc(o.shipping_address)}<br>
+        ${o.items.map((i) => `${esc(i.product_name)} x${i.quantity} — ${money(i.subtotal_mxn)}`).join('<br>')}<br>
+        <strong>Total: ${money(o.total_mxn)}</strong><br>
+        <label>Estado
+          <select data-order-status="${o.id}">
+            ${['Pendiente', 'Confirmado', 'Enviado', 'Entregado', 'Cancelado'].map((s) => `<option ${s === o.status ? 'selected' : ''}>${s}</option>`).join('')}
+          </select>
+        </label>
+      </div>`).join('');
+      window._products = products;
+    }
+
+    $('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      sessionStorage.setItem('vd_admin_key', $('admin-key').value.trim());
+      await enterPanel();
+    });
+
+    $('form-reset').addEventListener('click', () => {
+      $('product-form').reset();
+      $('pf-id').value = '';
+      $('form-title').textContent = 'Nuevo producto';
+      $('pf-current-photo').hidden = true;
+      $('form-error').hidden = true;
+      $('form-ok').hidden = true;
+    });
+
+    $('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      $('form-error').hidden = true;
+      $('form-ok').hidden = true;
+      const form = new FormData();
+      form.append('name', $('pf-name').value.trim());
+      form.append('category', $('pf-category').value);
+      form.append('brand', $('pf-brand').value.trim());
+      form.append('type', $('pf-type').value.trim());
+      form.append('description', $('pf-description').value.trim());
+      form.append('price_mxn', $('pf-price').value);
+      form.append('original_price_mxn', $('pf-original-price').value.trim());
+      form.append('stock', $('pf-stock').value);
+      form.append('active', $('pf-active').checked ? '1' : '0');
+      if ($('pf-image').files[0]) form.append('image', $('pf-image').files[0]);
+      const id = $('pf-id').value;
+      try {
+        const url = id ? `/api/admin/products/${id}` : '/api/admin/products';
+        await adminFetch(url, { method: id ? 'PUT' : 'POST', body: form });
+        $('form-ok').hidden = false;
+        $('form-ok').textContent = id ? 'Producto actualizado.' : 'Producto creado.';
+        $('product-form').reset();
+        $('pf-id').value = '';
+        $('form-title').textContent = 'Nuevo producto';
+        $('pf-current-photo').hidden = true;
+        await refreshAll();
+      } catch (err) {
+        $('form-error').hidden = false;
+        $('form-error').textContent = err.message;
+      }
+    });
+
+    document.addEventListener('click', async (e) => {
+      const edit = e.target.closest('[data-edit]');
+      if (edit) {
+        const p = (window._products || []).find((x) => x.id === Number(edit.dataset.edit));
+        if (!p) return;
+        $('pf-id').value = p.id;
+        $('pf-name').value = p.name;
+        $('pf-category').value = p.category;
+        $('pf-brand').value = p.brand || '';
+        $('pf-type').value = p.type || '';
+        $('pf-description').value = p.description || '';
+        $('pf-price').value = p.price_mxn;
+        $('pf-original-price').value = p.original_price_mxn || '';
+        $('pf-stock').value = p.stock;
+        $('pf-active').checked = Boolean(p.active);
+        $('form-title').textContent = `Editar: ${p.name}`;
+        $('pf-current-photo').hidden = !p.image_path;
+        $('pf-current-photo').textContent = p.image_path ? `Foto actual: ${p.image_path} (sube una nueva solo si quieres cambiarla)` : '';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      const del = e.target.closest('[data-delete]');
+      if (del) {
+        if (!window.confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
+        try {
+          await adminFetch(`/api/admin/products/${del.dataset.delete}`, { method: 'DELETE' });
+          await refreshAll();
+        } catch (err) {
+          window.alert(err.message);
+        }
+      }
+    });
+
+    document.addEventListener('change', async (e) => {
+      const select = e.target.closest('[data-order-status]');
+      if (!select) return;
+      try {
+        await adminFetch(`/api/admin/orders/${select.dataset.orderStatus}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: select.value }),
+        });
+        await refreshAll();
+      } catch (err) {
+        window.alert(err.message);
+        await refreshAll();
+      }
+    });
+
+    if (key()) enterPanel();
+  </script>
+</body>
+</html>
