@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: vlackdiamond-shop
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_KEY
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: WHATSAPP_NUMBER
+        value: "524493130357"
+      - key: DATA_DIR
+        value: /opt/render/project/src/data
+    disk:
+      name: vlackdiamond-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1

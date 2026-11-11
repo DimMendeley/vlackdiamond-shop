@@ -1,0 +1,1 @@
+{"dependencies":{"dotenv":"^16.4.5","express":"^4.19.2","multer":"^1.4.5-lts.1"},"description":"Tienda en línea VlackDiamond: perfumes árabes, gorras y bolsas para hombre. Pedidos por WhatsApp, sin pago en el sitio.","engines":{"node":">=22.5.0"},"main":"server.js","name":"vlackdiamond-shop","scripts":{"dev":"node --watch server.js","start":"node server.js"},"version":"1.0.0"}
